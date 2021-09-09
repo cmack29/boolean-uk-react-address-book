@@ -15,19 +15,18 @@
       "addressId": 2
     },
     {
-      "contactInputs": {
-        "firstName": "",
-        "lastName": "",
-        "blockContact": false,
-        "first-name-input": "conor",
-        "last-name-input": "mccormack",
-        "street-input": "xxx",
-        "city-input": "xxx",
-        "post-code-input": "xxx",
-        "block-checkbox": true
-      },
-      "addressId": 5,
+      "firstName": "Conor",
+      "lastName": "McCormack",
+      "blockContact": true,
+      "addressId": 3,
       "id": 3
+    },
+    {
+      "firstName": "Conor",
+      "lastName": "McCormack",
+      "blockContact": false,
+      "addressId": 4,
+      "id": 4
     }
   ],
   "addresses": [
@@ -44,22 +43,16 @@
       "postCode": "SW1A 1AA"
     },
     {
-      "street": "",
-      "city": "",
-      "postCode": "",
+      "street": "Conor's Street",
+      "city": "Conor's City",
+      "postCode": "Conor's Post Code",
       "id": 3
     },
     {
-      "street": "",
-      "city": "",
-      "postCode": "",
+      "street": "Conor's Street",
+      "city": "Conor's City",
+      "postCode": "Conor's Post Code",
       "id": 4
-    },
-    {
-      "street": "",
-      "city": "",
-      "postCode": "",
-      "id": 5
     }
   ]
 }

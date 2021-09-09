@@ -6,41 +6,49 @@ import "./styles.css";
 export default function App() {
   const [contacts, setContacts] = useState([]);
   const [hideForm, setHideForm] = useState(true);
-  const [contactInputs, setContactInputs] = useState({
-    firstName: "",
-    lastName: "",
-    blockContact: false,
-  })
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [blockContact, setBlockContact] = useState(false);
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postCode, setPostCode] = useState("")
   
-  console.log("CreateContactForm State: ", { contactInputs })
+  // console.log("CreateContactForm State: ", { contactInputs })
 
-  const handleContactInputs = event => {
-    console.log(
-      "Inside handleContactInputs: ",
-      event.target.name,
-      event.target.value
-    )
-  
-    const inputType = event.target.type
-  
-    const inputName = event.target.name
+  const handleFirstName = event => {
+    event.preventDefault()
 
-
-    if (inputType === "checkbox") {
-      setContactInputs({
-        ...contactInputs,
-        [inputName]: event.target.checked,
-      })
-    } else {
-      setContactInputs({
-        ...contactInputs,
-        [inputName]: event.target.value,
-      })
-    }
+    setfirstName(event.target.value)
   }
+
+  const handleLastName = event => {
+    event.preventDefault()
+
+    setlastName(event.target.value)
+  }
+
+  const handleBlockedContact = event => {
+    event.preventDefault()
+
+    setBlockContact(event.target.checked)
+  }
+
+const handleStreet = event => {
+  event.preventDefault()
+
+  setStreet(event.target.value)
+}
+
+const handleCity = event => {
+  event.preventDefault()
+
+  setCity(event.target.value)
+}
+ const handlePostCode = event => {
+  event.preventDefault()
+
+  setPostCode(event.target.value)
+ }
 
     // [TODO] Write a useEffect to fetch contacts here...
 useEffect(() => {
@@ -78,7 +86,9 @@ useEffect(() => {
         console.log("addresses POST request: ", newAddress)
 
         const contactToCreate = {
-          contactInputs,
+          firstName,
+          lastName,
+          blockContact,
           addressId: newAddress.id,
         }
         const fetchTools = {
@@ -93,6 +103,15 @@ useEffect(() => {
     .then((res) => res.json())
     .then((newContact) => {
       console.log("New contact: ", newContact)
+
+      const contactToAdd = {
+        ...newContact,
+        address: newAddress,
+      }
+
+      console.log("contact to add: ", contactToAdd)
+
+      setContacts([...contacts, contactToAdd])
     })
         // console.log("contact to create: ", contactToCreate)
 
@@ -102,9 +121,6 @@ useEffect(() => {
 
   }
   
-
-
-
   return (
     <>
       <ContactsList
@@ -112,7 +128,14 @@ useEffect(() => {
         hideForm={hideForm}
         setHideForm={setHideForm}
       />
-      <main>{!hideForm && <CreateContactForm handleContactInputs={handleContactInputs} handleSubmit={handleSubmit}/>}</main>
+      <main>{!hideForm && <CreateContactForm 
+      handleFirstName={handleFirstName} 
+      handleLastName={handleLastName} 
+      handleBlockedContact={handleBlockedContact}
+      handleSubmit={handleSubmit}
+      handlePostCode={handlePostCode} 
+      handleCity={handleCity} 
+      handleStreet={handleStreet}/>}</main>
     </>
   );
 }
