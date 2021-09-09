@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
 import ContactsList from "./components/ContactsList";
 import CreateContactForm from "./components/CreateContactForm";
+import EditContactForm from "./components/EditContactForm";
 import "./styles.css";
 
 export default function App() {
   const [contacts, setContacts] = useState([]);
+  const [contactsToEdit, setContactsToEdit] = useState([]);
   const [hideForm, setHideForm] = useState(true);
+  const [hideEditForm, setHideEditForm] = useState(true)
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [blockContact, setBlockContact] = useState(false);
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postCode, setPostCode] = useState("")
-  
-  // console.log("CreateContactForm State: ", { contactInputs })
 
+
+  
   const handleFirstName = event => {
     event.preventDefault()
 
@@ -50,15 +53,15 @@ const handleCity = event => {
   setPostCode(event.target.value)
  }
 
-    // [TODO] Write a useEffect to fetch contacts here...
+
 useEffect(() => {
 
   fetch(`http://localhost:3030/contacts`)
   .then((res) => res.json())
-  .then((newContact) => {
-    console.log("inside fetch: ", newContact)
+  .then((contacts) => {
+    // console.log("inside fetch: ", contacts)
 
-  setContacts(newContact)
+  setContacts(contacts)
   })
 }, [])
 
@@ -83,7 +86,7 @@ useEffect(() => {
     fetch("http://localhost:3030/addresses", fetchOptions)
       .then(res => res.json())
       .then(newAddress => {
-        console.log("addresses POST request: ", newAddress)
+        // console.log("addresses POST request: ", newAddress)
 
         const contactToCreate = {
           firstName,
@@ -102,7 +105,7 @@ useEffect(() => {
     fetch(`http://localhost:3030/contacts`, fetchTools)
     .then((res) => res.json())
     .then((newContact) => {
-      console.log("New contact: ", newContact)
+      // console.log("New contact: ", newContact)
 
       const contactToAdd = {
         ...newContact,
@@ -113,12 +116,7 @@ useEffect(() => {
 
       setContacts([...contacts, contactToAdd])
     })
-        // console.log("contact to create: ", contactToCreate)
-
-        // Ready to write our next post request in here...
       })
-
-
   }
   
   return (
@@ -126,8 +124,13 @@ useEffect(() => {
       <ContactsList
         contacts={contacts}
         hideForm={hideForm}
+        hideEditForm={hideEditForm}
         setHideForm={setHideForm}
+        setHideEditForm={setHideEditForm}
+        setContactsToEdit={setContactsToEdit}
       />
+
+      
       <main>{!hideForm && <CreateContactForm 
       handleFirstName={handleFirstName} 
       handleLastName={handleLastName} 
@@ -135,7 +138,9 @@ useEffect(() => {
       handleSubmit={handleSubmit}
       handlePostCode={handlePostCode} 
       handleCity={handleCity} 
-      handleStreet={handleStreet}/>}</main>
+      handleStreet={handleStreet}/>}
+      <EditContactForm contactsToEdit={contactsToEdit}/>
+      </main>
     </>
   );
 }
