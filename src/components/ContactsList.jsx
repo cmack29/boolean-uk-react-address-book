@@ -15,6 +15,7 @@ function ContactsList(props) {
       <ul>
         {contacts.map((contact, index) => {
           const { firstName, lastName, address } = contact;
+          const { street, postCode } = address;
           console.log("contact: ", contact)
 
           return (
@@ -23,7 +24,7 @@ function ContactsList(props) {
                 {firstName} {lastName}
               </h3>
               <p>
-                {address.street}, {address.postCode}
+                {street}, {postCode}
               </p>
               <button
               onClick={() => {setHideEditForm(!hideEditForm)

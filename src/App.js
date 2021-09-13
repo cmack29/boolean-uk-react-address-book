@@ -6,7 +6,7 @@ import "./styles.css";
 
 export default function App() {
   const [contacts, setContacts] = useState([]);
-  const [contactsToEdit, setContactsToEdit] = useState([]);
+  const [contactsToEdit, setContactsToEdit] = useState(null);
   const [hideForm, setHideForm] = useState(true);
   const [hideEditForm, setHideEditForm] = useState(true)
   const [firstName, setfirstName] = useState("");
@@ -59,9 +59,22 @@ useEffect(() => {
   fetch(`http://localhost:3030/contacts`)
   .then((res) => res.json())
   .then((contacts) => {
-    // console.log("inside fetch: ", contacts)
+    console.log("inside fetch: ", contacts)
 
-  setContacts(contacts)
+  fetch(`http://localhost:3030/addresses`)
+  .then((res) => res.json())
+  .then((addresses) => {
+
+    const updatedContacts = contacts.map(cons => {
+      const foundAddress = addresses.find(addr => cons.addressId === addr.id)
+      return {
+        ...cons,
+        address: foundAddress
+      }
+    })
+    setContacts(updatedContacts)
+
+  })
   })
 }, [])
 
@@ -112,11 +125,11 @@ useEffect(() => {
         address: newAddress,
       }
 
-      console.log("contact to add: ", contactToAdd)
+      // console.log("contact to add: ", contactToAdd)
 
       setContacts([...contacts, contactToAdd])
     })
-      })
+      }), []
   }
   
   return (
@@ -139,7 +152,7 @@ useEffect(() => {
       handlePostCode={handlePostCode} 
       handleCity={handleCity} 
       handleStreet={handleStreet}/>}
-      <EditContactForm contactsToEdit={contactsToEdit}/>
+      <EditContactForm contactsToEdit={contactsToEdit} setContacts={setContacts} contacts={contacts}/>
       </main>
     </>
   );
